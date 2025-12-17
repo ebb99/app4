@@ -32,8 +32,20 @@ pool.connect((err, client, done) => {
     console.log('PostgreSQL-Datenbank verbunden!');
 });
 
+// DELETE einen Verein
+app.delete('/api/vereine/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await pool.query('DELETE FROM vereine WHERE id = $1', [id]);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // DELETE eine Zeit
-app.delete('/zeiten/:id', async (req, res) => {
+app.delete('/api/zeiten/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -43,6 +55,20 @@ app.delete('/zeiten/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// GET alle Vereine
+app.get('/api/vereine', async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT id, vereinsname FROM vereine ORDER BY vereinsname'
+    );
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 
 // GET alle Zeiten
 app.get('/api/zeiten', async (req, res) => {
@@ -104,43 +130,6 @@ app.post('/api/zeiten', async (req, res) => {
     }
 });
 
-
-
-
-/*
-// --- API: Alle Termine abrufen ---
-app.get('/api/termine', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM termine ORDER BY start_zeitpunkt ASC');
-    res.json(result.rows);
-  } catch (error) {
-    console.error('Fehler beim Abrufen der Termine:', error);
-    res.status(500).json({ error: 'Fehler beim Abrufen der Termine' });
-  }
-});
-
-// --- API: Termin löschen ---
-app.delete('/api/termine/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const result = await pool.query('DELETE FROM termine WHERE id = $1 RETURNING *', [id]);
-
-    if (result.rowCount === 0) {
-      return res.status(404).json({ error: 'Termin nicht gefunden' });
-    }
-
-    res.json({ success: true, deleted: result.rows[0] });
-  } catch (error) {
-    console.error('Fehler beim Löschen des Termins:', error);
-    res.status(500).json({ error: 'Fehler beim Löschen des Termins' });
-  }
-});
-
-app.get('/termine', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'termine.html'));
-});
-*/
 
 
 // --- Static Files ---

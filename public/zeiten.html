@@ -25,9 +25,37 @@
 <input type="text" id="VereinInput" placeholder="Verein Name">
 <button id="saveVerein">Speichern</button>
 
-<script>
- document.addEventListener('DOMContentLoaded', ladeZeiten);
+<h2>Gespeicherte Vereine</h2>
 
+<select id="VereineSelect"></select>
+<button id="deleteVerein">Ausgewählten Verein löschen</button>
+
+
+<script>
+ document.addEventListener('DOMContentLoaded', () => {
+    ladeZeiten();
+    ladeVereine();
+});
+
+
+ async function ladeVereine() {
+    const res = await fetch('/api/vereine');
+    const vereine = await res.json();
+   
+    const select = document.getElementById('VereineSelect');
+    select.innerHTML = '';
+
+    vereine.forEach(z => {
+        const option = document.createElement('option');
+        option.value = z.id;
+
+        // Anzeige lokal formatiert
+        const ver = z.vereinsname;
+        option.textContent = ver;
+
+        select.appendChild(option);
+    });
+}
 async function ladeZeiten() {
     const res = await fetch('/api/zeiten');
     const zeiten = await res.json();
@@ -74,6 +102,7 @@ document.getElementById('saveVerein').addEventListener('click', async () => {
     if (res.ok) {
           alert("Daten gespeichert!");
           document.getElementById('VereinInput').value = '';
+          ladeVereine();
         } else {
           alert("Fehler beim Speichern.");
         }
@@ -111,6 +140,7 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
     if (res.ok) {
           alert("Daten gespeichert!");
           document.getElementById('zeitInput').value = '';
+          ladeZeiten();
         } else {
           alert("Fehler beim Speichern.");
         }
@@ -128,9 +158,24 @@ document.getElementById('deleteBtn').addEventListener('click', async () => {
     const id = document.getElementById('zeitenSelect').value;
     if (!id) return;
 
-    await fetch(`/zeiten/${id}`, { method: 'DELETE' });
+    await fetch(`/api/zeiten/${id}`, { method: 'DELETE' });
     ladeZeiten();
 });
+
+// Verein löschen
+document.getElementById('deleteVerein').addEventListener('click', async () => {
+    const id = document.getElementById('VereineSelect').value;
+    if (!id) return;
+
+    await fetch(`/api/vereine/${id}`, { method: 'DELETE' });
+    ladeVereine();          // 🔁 Liste neu laden
+      
+});
+
+
+
+
+
 </script>
 
 </body>
