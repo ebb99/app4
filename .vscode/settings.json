@@ -1,0 +1,38 @@
+{
+    "sqltools.connections": [
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "driver": "PostgreSQL",
+            "name": "fussball lokal",
+            "connectString": "postgres://postgres:6778@localhost:5432/postgres"
+        },
+        {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": false
+                }
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "driver": "PostgreSQL",
+            "name": "railway app2",
+            "connectString": "postgresql://postgres:KNCoGGSuHnEzARLBweiGYBogdRYfPHiV@tramway.proxy.rlwy.net:37984/railway"
+        },
+        {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": false
+                }
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "driver": "PostgreSQL",
+            "name": "app3 railway",
+            "connectString": "postgresql://postgres:MEQekfVZXaAtWsdUEcbImljPKEEZnfbg@tramway.proxy.rlwy.net:26081/railway"
+        }
+    ]
+}

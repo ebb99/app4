@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Zeiten verwalten</title>
+</head>
+<body>
+
+<h2>Neue Zeit eingeben</h2>
+
+<!-- Neue Zeit eingeben -->
+
+<input type="datetime-local" id="zeitInput">
+<button id="saveBtn">Speichern</button>
+
+<hr>
+
+<h2>Gespeicherte Zeiten</h2>
+
+<select id="zeitenSelect"></select>
+<button id="deleteBtn">Ausgewählte Zeit löschen</button>
+
+<h2>Neuen Verein eingeben</h2>
+
+<input type="text" id="VereinInput" placeholder="Verein Name">
+<button id="saveVerein">Speichern</button>
+
+<script>
+ document.addEventListener('DOMContentLoaded', ladeZeiten);
+
+async function ladeZeiten() {
+    const res = await fetch('/api/zeiten');
+    const zeiten = await res.json();
+
+    const select = document.getElementById('zeitenSelect');
+    select.innerHTML = '';
+
+    zeiten.forEach(z => {
+        const option = document.createElement('option');
+        option.value = z.id;
+
+        // Anzeige lokal formatiert
+        const date = new Date(z.zeit);
+        option.textContent = date.toLocaleString('de-DE');
+
+        select.appendChild(option);
+    });
+}
+
+
+
+
+// Neuen Verein speichern
+document.getElementById('saveVerein').addEventListener('click', async () => {
+    const verein = document.getElementById('VereinInput').value;
+  
+   
+    if (!verein) {
+        alert('Bitte Verein eingeben');
+        return;
+    }
+
+    // ⬇️ WICHTIG: in ISO-Format mit Zeitzone
+    //const isoTimestamp = new Date(value).toISOString();
+
+    
+    const res = await fetch('/api/vereine', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ vereinsname: verein })
+    }); 
+    
+
+    if (res.ok) {
+          alert("Daten gespeichert!");
+          document.getElementById('VereinInput').value = '';
+        } else {
+          alert("Fehler beim Speichern.");
+        }
+
+
+
+});
+/*
+    document.getElementById('zeitInput').value = '';
+    ladeZeiten();
+
+*/
+
+
+// Neue Zeit speichern
+document.getElementById('saveBtn').addEventListener('click', async () => {
+    const value = document.getElementById('zeitInput').value;
+
+    if (!value) {
+        alert('Bitte Datum und Uhrzeit eingeben');
+        return;
+    }
+
+    // ⬇️ WICHTIG: in ISO-Format mit Zeitzone
+    const isoTimestamp = new Date(value).toISOString();
+
+    
+    const res = await fetch('/api/zeiten', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ zeit: isoTimestamp })
+    }); 
+    
+
+    if (res.ok) {
+          alert("Daten gespeichert!");
+          document.getElementById('zeitInput').value = '';
+        } else {
+          alert("Fehler beim Speichern.");
+        }
+
+
+
+
+
+    document.getElementById('zeitInput').value = '';
+    ladeZeiten();
+});
+
+// Zeit löschen
+document.getElementById('deleteBtn').addEventListener('click', async () => {
+    const id = document.getElementById('zeitenSelect').value;
+    if (!id) return;
+
+    await fetch(`/zeiten/${id}`, { method: 'DELETE' });
+    ladeZeiten();
+});
+</script>
+
+</body>
+</html>
