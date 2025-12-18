@@ -9,3 +9,4 @@ CREATE TABLE vereine (
 );
 
 */
+select * from vereine
