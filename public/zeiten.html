@@ -3,11 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Zeiten verwalten</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="zeiten.css">
 
 </head>
 <body>
+<header>
+    <img src="ebbild_192.png" alt="ebb" style="width:60px;height:65px;">
+	<h1>Administrator Dashboard</h1> 
+</header>
 
+<nav>
+	<h2>Navigation</h2>
+	<ul>
+		<li><a href="#">Startseite</a>
+		</li>
+		<li><a href="#">Unterseite 1</a>
+		</li>
+		<li><a href="#">Unterseite 2</a>
+		</li>
+		<li><a href="#">Kontakt</a>
+		</li>
+	</ul>
+</nav>
+
+
+
+
+<main>
 <h2>Neue Zeit eingeben</h2>
 
 <!-- Neue Zeit eingeben -->
@@ -21,7 +43,7 @@
 
 <select id="zeitenSelect"></select>
 <button id="deleteBtn">Ausgewählte Zeit löschen</button>
-
+<hr>
 <h2>Neuen Verein eingeben</h2>
 
 <input type="text" id="VereinInput" placeholder="Verein Name">
@@ -31,7 +53,14 @@
 
 <select id="VereineSelect"></select>
 <button id="deleteVerein">Ausgewählten Verein löschen</button>
-
+</main>
+<aside id="news">
+	<h2>Spiele eingeben</h2>
+	<p>in Arbeit</p>
+</aside>
+<footer>
+	<h2>Fußzeile</h2>
+</footer>
 
 <script>
  document.addEventListener('DOMContentLoaded', () => {
